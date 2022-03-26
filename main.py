@@ -4,7 +4,6 @@ import datetime
 import re
 from itertools import combinations
 import matplotlib.pyplot as plt
-import pylab
 
 tik_f = open('tiker.txt')
 tickers = list((tik_f.readline().split()))
@@ -21,10 +20,7 @@ for elem in temp_dates:
     dates.append(re.findall(r'[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]', str(elem))[0])
 
 for tiker in tickers:
-    # data = yf.Ticker(tiker)
-    # sharesOutstanding_data[tiker] = data.info['sharesOutstanding']
-    # shares_data[tiker]   = yf.Ticker(tickers[0]).history(start=startDate, end=endDate, interval='1mo')
-    sharesOutstanding_data[tiker] = 10 ** 6
+    shares_data[tiker] = yf.Ticker(tickers[0]).history(start=startDate, end=endDate, interval='1mo')
 
 
 def get_mat_cap(tiker, data):
@@ -193,18 +189,15 @@ for i in range(len(dates) - 1):
     chart_data["Evgeny"].append(Zhe[-1])
     chart_data["Date"].append(dates[i])
 
-#plt.figure(figsize=(20, 10))
-fig, ax = plt.subplots()
-ax.title("Рост портфеля")
-ax.ylabel("Стоимость портфеля")
-ax.xlabel("Дата")
+fig, ax = plt.subplots(figsize=(12, 7))
+ax.set_title("Рост портфеля")
+ax.set_ylabel("Стоимость портфеля")
+ax.set_xlabel("Дата")
 
-Anatoly = ax.plot(chart_data["Date"], chart_data["Anatoly"])
-Boris = ax.plot(chart_data["Date"], chart_data["Boris"])
-Evgeny = ax.plot(chart_data["Date"], chart_data["Evgeny"])
+ax.plot(chart_data["Date"], chart_data["Anatoly"], label='Anatoly')
+ax.plot(chart_data["Date"], chart_data["Boris"], label='Boris')
+ax.plot(chart_data["Date"], chart_data["Evgeny"], label='Evgeny')
 
-
-ax.legend([Anatoly, Boris, Evgeny], ['Anatoly', 'Boris', 'Evgeny'])
+legend = ax.legend(loc='best', shadow=True, fontsize='x-large')
 
 plt.show()
-
